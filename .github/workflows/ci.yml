@@ -1,0 +1,52 @@
+name: CI Kedro Poetry Sonar
+
+# Se activa al hacer push o pull request a la rama main
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Descargó el código del repositorio
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Requerido para un mejor análisis de SonarCloud
+
+    # Configuró la versión de Python
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    # Instaló Poetry para manejar dependencias
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+    # Instaló las dependencias del proyecto
+    - name: Install dependencies
+      run: |
+        poetry install
+
+    # Ejecutó el linter para verificar el estilo del código
+    - name: Run Lint
+      run: |
+        poetry run ruff check .
+
+    # Ejecutó las pruebas unitarias y generó reporte de cobertura
+    - name: Run Tests
+      run: |
+        poetry run pytest --cov=src --cov-report=xml
+
+    # Realizó el análisis de calidad de código con SonarCloud
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

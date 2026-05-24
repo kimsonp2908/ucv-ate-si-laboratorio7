@@ -1,0 +1,4 @@
+# Ruta de entrada de la imagen original
+input_path: "data/01_raw/imagen.jpg"
+# Ruta de salida para la imagen procesada
+output_path: "data/02_intermediate/imagen_procesada.jpg"

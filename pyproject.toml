@@ -1,0 +1,67 @@
+[tool.poetry]
+name = "p-laboratorio-ucv-kedro-poetry-gha-sonar"
+version = "0.1.0"
+description = "Laboratorio UCV con Kedro, Poetry, GHA y SonarCloud"
+authors = ["kimsonp2908 <khidalgoh@ucvvirtual.edu.pe>"]
+readme = "README.md"
+packages = [{ include = "lab7", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+kedro = "~=1.3.1"
+kedro-datasets = { extras = ["pandas-csvdataset", "pandas-exceldataset", "pandas-parquetdataset", "plotly-plotlydataset", "plotly-jsondataset", "matplotlib-matplotlibdataset", "spark-sparkdataset"], version = ">=9.1" }
+kedro-viz = ">=6.7.0"
+pillow = ">=10.0.0"
+pandas = ">=2.0.0"
+scikit-learn = "~=1.5.1"
+seaborn = "~=0.12.1"
+ipython = ">=8.10"
+jupyterlab = ">=3.0"
+notebook = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.0.0"
+pytest-cov = ">=4.0.0"
+ruff = ">=0.1.0"
+black = ">=23.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.kedro]
+package_name = "lab7"
+project_name = "lab7"
+kedro_init_version = "1.3.1"
+tools = "['Linting', 'Testing', 'Custom Logging', 'Documentation', 'Data Structure', 'PySpark']"
+example_pipeline = "True"
+source_dir = "src"
+
+[tool.pytest.ini_options]
+addopts = """
+--cov-report term-missing \
+--cov src/lab7 -ra"""
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
+exclude_lines = ["pragma: no cover", "raise NotImplementedError"]
+
+[tool.ruff]
+line-length = 88
+show-fixes = true
+
+[tool.ruff.lint]
+select = [
+    "F",   # Pyflakes
+    "W",   # pycodestyle
+    "E",   # pycodestyle
+    "I",   # isort
+    "UP",  # pyupgrade
+    "PL",  # Pylint
+    "T201", # Print Statement
+]
+ignore = ["E501"]
+
+[tool.kedro_telemetry]
+project_id = "ea72d81adba84473bb7b9d9c02ce47ee"
